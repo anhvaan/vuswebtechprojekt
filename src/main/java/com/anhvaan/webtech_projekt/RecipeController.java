@@ -14,21 +14,25 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/api/recipes")
     public List<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/api/recipes/{id}")
     public Recipe getRecipeById(@PathVariable Long id) {
         return recipeService.getRecipeById(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/api/recipes")
     public Recipe createRecipe(@RequestBody Recipe recipe) {
         return recipeService.saveRecipe(recipe);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/api/recipes/{id}")
     public Recipe updateRecipe(@PathVariable Long id, @RequestBody Recipe updatedRecipe) {
         Recipe recipe = recipeService.getRecipeById(id);
@@ -41,6 +45,7 @@ public class RecipeController {
         return recipeService.saveRecipe(recipe);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/api/recipes/{id}")
     public void deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
