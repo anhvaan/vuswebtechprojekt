@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api/recipes")
 public class RecipeController {
 
     private final RecipeService recipeService;
@@ -14,26 +15,22 @@ public class RecipeController {
         this.recipeService = recipeService;
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("/api/recipes")
+    @GetMapping
     public List<Recipe> getAllRecipes() {
         return recipeService.getAllRecipes();
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @GetMapping("/api/recipes/{id}")
+    @GetMapping("/{id}")
     public Recipe getRecipeById(@PathVariable Long id) {
         return recipeService.getRecipeById(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @PostMapping("/api/recipes")
+    @PostMapping
     public Recipe createRecipe(@RequestBody Recipe recipe) {
         return recipeService.saveRecipe(recipe);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @PutMapping("/api/recipes/{id}")
+    @PutMapping("/{id}")
     public Recipe updateRecipe(@PathVariable Long id, @RequestBody Recipe updatedRecipe) {
         Recipe recipe = recipeService.getRecipeById(id);
 
@@ -41,12 +38,15 @@ public class RecipeController {
         recipe.setDescription(updatedRecipe.getDescription());
         recipe.setIngredients(updatedRecipe.getIngredients());
         recipe.setInstructions(updatedRecipe.getInstructions());
+        recipe.setPrepTime(updatedRecipe.getPrepTime());
+        recipe.setCookTime(updatedRecipe.getCookTime());
+        recipe.setServings(updatedRecipe.getServings());
+        recipe.setImageUrl(updatedRecipe.getImageUrl());
 
         return recipeService.saveRecipe(recipe);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
-    @DeleteMapping("/api/recipes/{id}")
+    @DeleteMapping("/{id}")
     public void deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
     }
