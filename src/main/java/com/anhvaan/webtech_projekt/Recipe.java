@@ -14,11 +14,12 @@ public class Recipe {
     private String title;
     private String description;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> ingredients;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private List<String> instructions;
+
 
     private int prepTime;
     private int cookTime;
