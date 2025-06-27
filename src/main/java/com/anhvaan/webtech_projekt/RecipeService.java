@@ -1,35 +1,40 @@
 package com.anhvaan.webtech_projekt;
 
+import com.anhvaan.webtech_projekt.Recipe;
+import com.anhvaan.webtech_projekt.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RecipeService {
 
     @Autowired
-    RecipeRepository repo;
+    private RecipeRepository recipeRepository;
 
-    public Recipe saveRecipe(Recipe recipe) {
-        return repo.save(recipe);
+    public List<Recipe> getAllRecipesByUserId(String userId) {
+        return recipeRepository.findByUserId(userId);
     }
 
-    public Recipe getRecipeById(Long id) {
-        return repo.findById(id).orElseThrow(RuntimeException::new);
+    public Optional<Recipe> getRecipeById(Long id) {
+        return recipeRepository.findById(id);
     }
 
-    public List<Recipe> getAllRecipes() {
-        Iterable<Recipe> iterator = repo.findAll();
-        List<Recipe> recipes = new ArrayList<>();
-        for (Recipe recipe : iterator) {
-            recipes.add(recipe);
-        }
-        return recipes;
+    public Recipe createRecipe(Recipe recipe) {
+        return recipeRepository.save(recipe);
+    }
+
+    public Recipe updateRecipe(Long id, Recipe recipe) {
+        recipe.setId(id);
+        return recipeRepository.save(recipe);
     }
 
     public void deleteRecipe(Long id) {
-        repo.deleteById(id);
+        recipeRepository.deleteById(id);
+    }
+
+    public List<Recipe> getFavoriteRecipes(String userId) {
+        return recipeRepository.findByUserIdAndIsFavoriteTrue(userId);
     }
 }
