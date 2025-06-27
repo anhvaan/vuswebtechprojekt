@@ -1,131 +1,107 @@
 package com.anhvaan.webtech_projekt;
 
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Table(name = "recipes")
 public class Recipe {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String title;
+
+    @Column(length = 1000)
     private String description;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
+    @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "ingredient")
     private List<String> ingredients;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
+    @CollectionTable(name = "recipe_instructions", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "instruction", length = 1000)
     private List<String> instructions;
 
+    @Column(name = "prep_time")
+    private Integer prepTime;
 
-    private int prepTime;
-    private int cookTime;
-    private int servings;
+    @Column(name = "cook_time")
+    private Integer cookTime;
+
+    private Integer servings;
+
+    @Column(name = "image_url")
     private String imageUrl;
 
+    @Column(name = "user_id")
+    private String userId;
+
+    @Column(name = "is_favorite")
+    private Boolean isFavorite = false;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    // Constructors
     public Recipe() {}
 
-    public Recipe(String title, String description, List<String> ingredients, List<String> instructions,
-                  int prepTime, int cookTime, int servings, String imageUrl) {
-        this.title = title;
-        this.description = description;
-        this.ingredients = ingredients;
-        this.instructions = instructions;
-        this.prepTime = prepTime;
-        this.cookTime = cookTime;
-        this.servings = servings;
-        this.imageUrl = imageUrl;
-    }
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    // --- Getter und Setter ---
+    public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getDescription() { return description; }
+    public void setDescription(String description) { this.description = description; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public List<String> getIngredients() { return ingredients; }
+    public void setIngredients(List<String> ingredients) { this.ingredients = ingredients; }
 
-    public String getTitle() {
-        return title;
-    }
+    public List<String> getInstructions() { return instructions; }
+    public void setInstructions(List<String> instructions) { this.instructions = instructions; }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+    public Integer getPrepTime() { return prepTime; }
+    public void setPrepTime(Integer prepTime) { this.prepTime = prepTime; }
 
-    public String getDescription() {
-        return description;
-    }
+    public Integer getCookTime() { return cookTime; }
+    public void setCookTime(Integer cookTime) { this.cookTime = cookTime; }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    public Integer getServings() { return servings; }
+    public void setServings(Integer servings) { this.servings = servings; }
 
-    public List<String> getIngredients() {
-        return ingredients;
-    }
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
-    public void setIngredients(List<String> ingredients) {
-        this.ingredients = ingredients;
-    }
+    public String getUserId() { return userId; }
+    public void setUserId(String userId) { this.userId = userId; }
 
-    public List<String> getInstructions() {
-        return instructions;
-    }
+    public Boolean getIsFavorite() { return isFavorite; }
+    public void setIsFavorite(Boolean isFavorite) { this.isFavorite = isFavorite; }
 
-    public void setInstructions(List<String> instructions) {
-        this.instructions = instructions;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public int getPrepTime() {
-        return prepTime;
-    }
-
-    public void setPrepTime(int prepTime) {
-        this.prepTime = prepTime;
-    }
-
-    public int getCookTime() {
-        return cookTime;
-    }
-
-    public void setCookTime(int cookTime) {
-        this.cookTime = cookTime;
-    }
-
-    public int getServings() {
-        return servings;
-    }
-
-    public void setServings(int servings) {
-        this.servings = servings;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    @Override
-    public String toString() {
-        return "Recipe{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", ingredients=" + ingredients +
-                ", instructions=" + instructions +
-                ", prepTime=" + prepTime +
-                ", cookTime=" + cookTime +
-                ", servings=" + servings +
-                ", imageUrl='" + imageUrl + '\'' +
-                '}';
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }
