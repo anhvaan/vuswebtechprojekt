@@ -1,9 +1,9 @@
 package com.anhvaan.webtech_projekt;
 
-import com.anhvaan.webtech_projekt.Recipe;
-import com.anhvaan.webtech_projekt.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +32,15 @@ public class RecipeService {
 
     public void deleteRecipe(Long id) {
         recipeRepository.deleteById(id);
+    }
+
+    @Transactional
+    public Recipe toggleFavorite(Long id, Boolean isFavorite) {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Recipe not found"));
+
+        recipe.setIsFavorite(isFavorite);
+        return recipeRepository.save(recipe);
     }
 
     public List<Recipe> getFavoriteRecipes(String userId) {

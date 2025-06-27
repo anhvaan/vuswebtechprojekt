@@ -1,11 +1,10 @@
 package com.anhvaan.webtech_projekt;
 
-import com.anhvaan.webtech_projekt.Recipe;
-import com.anhvaan.webtech_projekt.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -43,6 +42,12 @@ public class RecipeController {
     public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/favorite")
+    public ResponseEntity<Recipe> toggleFavorite(@PathVariable Long id, @RequestBody Map<String, Boolean> favoriteData) {
+        Recipe recipe = recipeService.toggleFavorite(id, favoriteData.get("isFavorite"));
+        return ResponseEntity.ok(recipe);
     }
 
     @GetMapping("/favorites")
