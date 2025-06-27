@@ -1,53 +1,52 @@
 package com.anhvaan.webtech_projekt;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
+import com.anhvaan.webtech_projekt.Recipe;
+import com.anhvaan.webtech_projekt.RecipeService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/recipes")
+@CrossOrigin(origins = "http://localhost:5173")
 public class RecipeController {
 
-    private final RecipeService recipeService;
-
     @Autowired
-    public RecipeController(RecipeService recipeService) {
-        this.recipeService = recipeService;
-    }
+    private RecipeService recipeService;
 
     @GetMapping
     public List<Recipe> getAllRecipes() {
-        return recipeService.getAllRecipes();
+        // Für Demo - alle Rezepte ohne User-Filter
+        return recipeService.getAllRecipesByUserId("1");
     }
 
     @GetMapping("/{id}")
-    public Recipe getRecipeById(@PathVariable Long id) {
-        return recipeService.getRecipeById(id);
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) {
+        Optional<Recipe> recipe = recipeService.getRecipeById(id);
+        return recipe.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public Recipe createRecipe(@RequestBody Recipe recipe) {
-        return recipeService.saveRecipe(recipe);
+        return recipeService.createRecipe(recipe);
     }
 
     @PutMapping("/{id}")
-    public Recipe updateRecipe(@PathVariable Long id, @RequestBody Recipe updatedRecipe) {
-        Recipe recipe = recipeService.getRecipeById(id);
-
-        recipe.setTitle(updatedRecipe.getTitle());
-        recipe.setDescription(updatedRecipe.getDescription());
-        recipe.setIngredients(updatedRecipe.getIngredients());
-        recipe.setInstructions(updatedRecipe.getInstructions());
-        recipe.setPrepTime(updatedRecipe.getPrepTime());
-        recipe.setCookTime(updatedRecipe.getCookTime());
-        recipe.setServings(updatedRecipe.getServings());
-        recipe.setImageUrl(updatedRecipe.getImageUrl());
-
-        return recipeService.saveRecipe(recipe);
+    public Recipe updateRecipe(@PathVariable Long id, @RequestBody Recipe recipe) {
+        return recipeService.updateRecipe(id, recipe);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRecipe(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/favorites")
+    public List<Recipe> getFavoriteRecipes(@RequestParam String userId) {
+        return recipeService.getFavoriteRecipes(userId);
     }
 }
