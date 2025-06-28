@@ -13,23 +13,28 @@ public class RecipeService {
     @Autowired
     private RecipeRepository recipeRepository;
 
+    @Transactional
     public List<Recipe> getAllRecipesByUserId(String userId) {
         return recipeRepository.findByUserId(userId);
     }
 
+    @Transactional
     public Optional<Recipe> getRecipeById(Long id) {
         return recipeRepository.findById(id);
     }
 
+    @Transactional
     public Recipe createRecipe(Recipe recipe) {
         return recipeRepository.save(recipe);
     }
 
+    @Transactional
     public Recipe updateRecipe(Long id, Recipe recipe) {
         recipe.setId(id);
         return recipeRepository.save(recipe);
     }
 
+    @Transactional
     public void deleteRecipe(Long id) {
         recipeRepository.deleteById(id);
     }
@@ -43,6 +48,7 @@ public class RecipeService {
         return recipeRepository.save(recipe);
     }
 
+    @Transactional
     public List<Recipe> getFavoriteRecipes(String userId) {
         return recipeRepository.findByUserIdAndIsFavoriteTrue(userId);
     }
