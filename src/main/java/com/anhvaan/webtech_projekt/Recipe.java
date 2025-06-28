@@ -18,12 +18,12 @@ public class Recipe {
     @Column(length = 1000)
     private String description;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)  // Changed to EAGER
     @CollectionTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"))
     @Column(name = "ingredient")
     private List<String> ingredients;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)  // Changed to EAGER
     @CollectionTable(name = "recipe_instructions", joinColumns = @JoinColumn(name = "recipe_id"))
     @Column(name = "instruction", length = 1000)
     private List<String> instructions;
